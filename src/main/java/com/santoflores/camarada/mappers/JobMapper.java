@@ -1,8 +1,11 @@
 package com.santoflores.camarada.mappers;
 
+import org.springframework.stereotype.Component;
+
 import com.santoflores.camarada.dtos.job.JobResponse;
 import com.santoflores.camarada.models.Job;
 
+@Component
 public class JobMapper {
 
     public JobResponse toResponse(Job job) {

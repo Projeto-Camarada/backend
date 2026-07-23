@@ -1,8 +1,11 @@
 package com.santoflores.camarada.mappers;
 
+import org.springframework.stereotype.Component;
+
 import com.santoflores.camarada.dtos.provider.ProviderResponse;
 import com.santoflores.camarada.models.Provider;
 
+@Component
 public class ProviderMapper {
     
     public ProviderResponse toResponse(Provider provider) {
