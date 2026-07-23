@@ -2,6 +2,8 @@ package com.santoflores.camarada.models;
 
 import java.io.Serializable;
 
+import com.santoflores.camarada.ids.ProviderServiceId;
+
 import jakarta.persistence.Embeddable;
 import jakarta.persistence.EmbeddedId;
 import jakarta.persistence.Entity;
@@ -32,15 +34,4 @@ public class ProviderService {
     private Service service;
 
     private String description;
-}
-
-@Data
-@Embeddable
-@NoArgsConstructor
-@AllArgsConstructor
-class ProviderServiceId implements Serializable {
-
-    private Long providerId;
-
-    private Long serviceId;
 }
