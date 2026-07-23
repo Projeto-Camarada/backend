@@ -2,9 +2,11 @@ package com.santoflores.camarada.dtos.review;
 
 import java.time.LocalDateTime;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
 
 @Data
+@AllArgsConstructor
 public class ReviewResponse {
 
     private Long id;

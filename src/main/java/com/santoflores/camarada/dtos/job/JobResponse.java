@@ -5,9 +5,11 @@ import java.time.LocalDateTime;
 
 import com.santoflores.camarada.enums.JobStatus;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
 
 @Data
+@AllArgsConstructor
 public class JobResponse {
 
     private Long id;
@@ -23,5 +25,13 @@ public class JobResponse {
     private BigDecimal finalPrice;
 
     private LocalDateTime requestedAt;
+
+    private Short estimatedDurationHours;
+
+    private Short actualDurationHours;
+
+    private LocalDateTime startedAt;
+
+    private LocalDateTime completedAt;
 
 }

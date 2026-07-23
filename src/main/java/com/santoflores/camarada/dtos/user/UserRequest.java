@@ -9,6 +9,10 @@ public class UserRequest {
 
     private String phone;
 
+    private String email;
+
+    private String password;
+
     private String photoUrl;
 
 }
