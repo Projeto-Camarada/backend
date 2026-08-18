@@ -1,8 +1,11 @@
 package com.santoflores.camarada.services;
 
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
+
 import com.santoflores.camarada.security.TokenService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -10,9 +13,9 @@ import org.springframework.stereotype.Service;
 import com.santoflores.camarada.dtos.auth.LoginRequest;
 import com.santoflores.camarada.dtos.auth.LoginResponse;
 import com.santoflores.camarada.dtos.auth.RegisterRequest;
-import com.santoflores.camarada.dtos.user.UserResponse;
+import com.santoflores.camarada.exceptions.InvalidCredentialsException;
+import com.santoflores.camarada.exceptions.UserNotFoundException;
 import com.santoflores.camarada.mappers.AuthMapper;
-import com.santoflores.camarada.mappers.UserMapper;
 import com.santoflores.camarada.models.User;
 import com.santoflores.camarada.repositories.UserRepository;
 
@@ -32,17 +35,29 @@ public class AuthService {
     public LoginResponse login(LoginRequest request) {
 
         UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(
-            request.getEmail(), 
+            request.getPhone(), 
             request.getPassword()
         );
 
-        Authentication auth = authenticationManager.authenticate(authentication);
-
-        User user = (User) auth.getPrincipal();
-
-        String token = tokenService.generationToken(user);
+        try {
+            Authentication auth = authenticationManager.authenticate(authentication);
     
-        return new LoginResponse(token);
+            User user = (User) auth.getPrincipal();
+            
+
+            String token = tokenService.generationToken(user);
+        
+            return new LoginResponse(token);
+            
+        } catch (BadCredentialsException e) {
+
+            throw new InvalidCredentialsException("Telefone ou senha inválidos.");
+
+        } catch (Exception e) {
+            System.out.println(e.getClass().getName());
+            throw e;
+        }
+
     }
 
     public User getUserInfo(String token) {
@@ -62,8 +77,8 @@ public class AuthService {
     }
 
     public User register(RegisterRequest request) {
-        if (userRepository.existsByEmail(request.getEmail())) {
-            throw new RuntimeException("Email já cadastrado.");
+        if (userRepository.existsByEmail(request.getPhone())) {
+            throw new RuntimeException("Telefone já cadastrado.");
         }
 
         User user = authMapper.toModel(request, passwordEncoder);

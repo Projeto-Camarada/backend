@@ -20,7 +20,7 @@ public class TokenService {
         try {
             String token = JWT.create()
                     .withIssuer("camarada")
-                    .withSubject(user.getEmail())
+                    .withSubject(user.getPhone())
                     .withClaim("userId", user.getId())
                     .withClaim("name", user.getName())
                     .withExpiresAt(getExpirationTokenDate())

@@ -1,12 +1,14 @@
 package com.santoflores.camarada.services;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
+import com.santoflores.camarada.exceptions.UserNotFoundException;
 import com.santoflores.camarada.models.User;
 import com.santoflores.camarada.repositories.UserRepository;
 
@@ -19,11 +21,21 @@ public class UserService implements UserDetailsService{
     private final UserRepository repository;
 
     @Override
-    public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-        User user = repository.findByEmail(email)
-                .orElseThrow(() -> new RuntimeException("Usuário não encontrado."));
+    public UserDetails loadUserByUsername(String phone) throws UsernameNotFoundException {
 
-        return user;
+        try {
+            User user = repository.findByPhone(phone).orElseThrow(() ->
+                new UsernameNotFoundException("Usuário não encontrado.")
+            );
+
+            return user;
+
+        } catch (Exception e) {
+
+            e.printStackTrace();
+
+            throw e;
+        }
     }
 
     public User save(User user){

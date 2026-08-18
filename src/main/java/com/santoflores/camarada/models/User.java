@@ -17,12 +17,16 @@ import jakarta.persistence.Id;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotNull;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Entity
 @Data
 @Builder
+@NoArgsConstructor
+@AllArgsConstructor
 @Table(name = "users")
 public class User implements UserDetails {
  
@@ -68,7 +72,7 @@ public class User implements UserDetails {
     
     @Override
     public String getUsername() {
-        return email;
+        return phone;
     }
 
 }
