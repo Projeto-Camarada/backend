@@ -26,6 +26,13 @@ CREATE TABLE providers (
     FOREIGN KEY (user_id) REFERENCES users(id)
 );
 
+CREATE TABLE professions (
+    id BIGINT PRIMARY KEY AUTO_INCREMENT,
+    name VARCHAR(100) NOT NULL,
+    active BOOLEAN DEFAULT FALSE
+);
+
+
 CREATE TABLE jobs (
     id BIGINT PRIMARY KEY AUTO_INCREMENT,
 
