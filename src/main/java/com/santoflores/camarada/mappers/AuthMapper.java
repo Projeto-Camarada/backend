@@ -11,10 +11,10 @@ public class AuthMapper {
     
     public User toModel(RegisterRequest request, PasswordEncoder passwordEncoder) {
         return User.builder()
-                .name(request.getName())
-                .email(request.getEmail())
-                .phone(request.getPhone())
-                .password(passwordEncoder.encode(request.getPassword()))
+                .name(request.name())
+                .email(request.email())
+                .phone(request.phone())
+                .password(passwordEncoder.encode(request.password()))
                 .build();
     }
 }

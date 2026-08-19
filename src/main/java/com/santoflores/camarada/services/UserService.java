@@ -44,12 +44,12 @@ public class UserService implements UserDetailsService{
 
     public User findById(Long id){
         return repository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Usuário não encontrado."));
+                .orElseThrow(() -> new UserNotFoundException("Usuário não encontrado."));
     }
 
     public User findByEmail(String email){
         return repository.findByEmail(email)
-                .orElseThrow(() -> new RuntimeException("Usuário não encontrado."));
+                .orElseThrow(() -> new UserNotFoundException("Usuário não encontrado."));
     }
 
     public List<User> findAll(){

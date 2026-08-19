@@ -7,28 +7,26 @@ import com.santoflores.camarada.enums.Plan;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
-@Data
-@AllArgsConstructor
-public class ProviderResponse {
+public record ProviderResponse(
+    Long id,
 
-    private Long id;
+    Plan plan,
 
-    private Plan plan;
+    LocalDateTime planExpiresAt,
 
-    private LocalDateTime planExpiresAt;
+    String cpfCnpj,
 
-    private String cpfCnpj;
+    String name,
 
-    private String name;
+    String photoUrl,
 
-    private String photoUrl;
+    String bio,
 
-    private String bio;
+    Boolean verified,
 
-    private Boolean verified;
+    Short experience
 
-    private Short experience;
-
+) {
     // private Double rating;
 
 }

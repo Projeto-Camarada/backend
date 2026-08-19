@@ -3,18 +3,16 @@ package com.santoflores.camarada.dtos.user;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
-@Data
-@AllArgsConstructor
-public class UserResponse {
+public record UserResponse(
+    Long id,
 
-    private Long id;
+    String name,
 
-    private String name;
+    String email,
 
-    private String email;
+    String phone,
 
-    private String phone;
+    String photoUrl
 
-    private String photoUrl;
-
+) {
 }

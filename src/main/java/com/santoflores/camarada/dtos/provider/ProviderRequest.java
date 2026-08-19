@@ -1,14 +1,15 @@
 package com.santoflores.camarada.dtos.provider;
 
+import com.santoflores.camarada.enums.Plan;
+
 import lombok.Data;
 
-@Data
-public class ProviderRequest {
+public record ProviderRequest(
+    String cpfCnpj,
 
-    private String cpfCnpj;
+    String bio,
 
-    private String bio;
+    Short experience
 
-    private Short experience;
-
+) {
 }

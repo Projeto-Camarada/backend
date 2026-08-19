@@ -3,13 +3,12 @@ package com.santoflores.camarada.dtos.auth;
 import jakarta.validation.constraints.NotBlank;
 import lombok.Data;
 
-@Data
-public class LoginRequest {
+public record LoginRequest(
+    @NotBlank
+    String phone,
 
     @NotBlank
-    private String phone;
+    String password
 
-    @NotBlank
-    private String password;
-
+) {
 }

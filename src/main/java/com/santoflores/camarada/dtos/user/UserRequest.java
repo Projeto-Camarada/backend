@@ -2,17 +2,16 @@ package com.santoflores.camarada.dtos.user;
 
 import lombok.Data;
 
-@Data
-public class UserRequest {
+public record UserRequest(
+    String name,
 
-    private String name;
+    String phone,
 
-    private String phone;
+    String email,
 
-    private String email;
+    String password,
 
-    private String password;
+    String photoUrl
 
-    private String photoUrl;
-
+) {
 }

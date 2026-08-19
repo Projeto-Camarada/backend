@@ -2,21 +2,18 @@ package com.santoflores.camarada.dtos.auth;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
-import lombok.Data;
 
-@Data
-public class RegisterRequest {
-
+public record RegisterRequest(
     @NotBlank
-    private String name;
+    String name,
 
     @Email
-    private String email;
+    String email,
 
     @NotBlank
-    private String password;
+    String password,
 
     @NotBlank
-    private String phone;
-
+    String phone
+) {
 }

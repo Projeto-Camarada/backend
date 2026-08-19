@@ -2,17 +2,16 @@ package com.santoflores.camarada.dtos.provider;
 
 import lombok.Data;
 
-@Data
-public class ProviderSummaryResponse {
+public record ProviderSummaryResponse(
+    Long id,
 
-    private Long id;
+    String name,
 
-    private String name;
+    String photoUrl,
 
-    private String photoUrl;
+    Boolean verified,
 
-    private Boolean verified;
+    Double rating
 
-    private Double rating;
-
+) {
 }

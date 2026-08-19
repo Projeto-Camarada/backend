@@ -11,10 +11,10 @@ public class UserMapper {
     
     public User toModel(UserRequest request) {
         return User.builder()
-            .name(request.getName())
-            .phone(request.getPhone())
-            .password(request.getPassword())
-            .photoUrl(request.getPhotoUrl())
+            .name(request.name())
+            .phone(request.phone())
+            .password(request.password())
+            .photoUrl(request.photoUrl())
             .build();
     }
 

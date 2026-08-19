@@ -2,6 +2,7 @@ package com.santoflores.camarada.mappers;
 
 import org.springframework.stereotype.Component;
 
+import com.santoflores.camarada.dtos.provider.ProviderRequest;
 import com.santoflores.camarada.dtos.provider.ProviderResponse;
 import com.santoflores.camarada.models.Provider;
 
@@ -20,6 +21,14 @@ public class ProviderMapper {
             provider.getVerified(),
             provider.getExperience()
         );
+    }
+
+    public Provider toModel(ProviderRequest provider) {
+        return Provider.builder()
+        .bio(provider.bio())
+        .cpfCnpj(provider.cpfCnpj())
+        .experience(provider.experience())
+        .build();
     }
 
 }

@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.santoflores.camarada.dtos.provider.ProviderRequest;
 import com.santoflores.camarada.dtos.provider.ProviderResponse;
 import com.santoflores.camarada.mappers.ProviderMapper;
 import com.santoflores.camarada.models.Provider;
@@ -37,11 +38,19 @@ public class ProviderController {
         return ResponseEntity.ok(providerMapper.toResponse(service.findById(id)));
     }
 
-    @PostMapping
+    @PostMapping("/{userId}")
     public ResponseEntity<ProviderResponse> save(
-            @RequestBody Provider provider){
+        @RequestBody ProviderRequest provider,
+        @PathVariable Long userId
+    ){
 
         return ResponseEntity.status(HttpStatus.CREATED)
-                .body(providerMapper.toResponse(service.save(provider)));
+            .body(
+                providerMapper.toResponse(
+                    service.save(
+                        providerMapper.toModel(provider), userId
+                    )
+                )
+            );
     }
 }
