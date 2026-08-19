@@ -1,5 +1,6 @@
 package com.santoflores.camarada.services;
 
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -14,6 +15,7 @@ import com.santoflores.camarada.dtos.auth.LoginRequest;
 import com.santoflores.camarada.dtos.auth.LoginResponse;
 import com.santoflores.camarada.dtos.auth.RegisterRequest;
 import com.santoflores.camarada.dtos.user.UserResponse;
+import com.santoflores.camarada.exceptions.EmailAlreadyExistsException;
 import com.santoflores.camarada.exceptions.InvalidCredentialsException;
 import com.santoflores.camarada.exceptions.UserNotFoundException;
 import com.santoflores.camarada.mappers.AuthMapper;
@@ -83,8 +85,31 @@ public class AuthService {
             throw new RuntimeException("Telefone já cadastrado.");
         }
 
-        User user = authMapper.toModel(request, passwordEncoder);
+        String email = request.email();
 
-        return userRepository.save(user);
+        if (email != null && !email.isBlank()) {
+            email = email.trim().toLowerCase();
+
+            if (userRepository.existsByEmail(email)) {
+                throw new EmailAlreadyExistsException("E-mail já cadastrado");
+            }
+        } else {
+            email = null;
+        }
+
+        User user = authMapper.toModel(request, passwordEncoder);
+        user.setEmail(email);
+        
+        try {
+            return userRepository.save(user);
+        } catch (DataIntegrityViolationException e) {
+            //POR ENQUANTO DEIXAR ASSIM
+            throw new InvalidCredentialsException("Dados inválidos.");
+
+        } catch (Exception e) {
+            System.out.println(e.getClass().getName());
+            throw e;
+        }
+
     }
 }

@@ -4,9 +4,11 @@ import java.util.Map;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
+import com.santoflores.camarada.exceptions.EmailAlreadyExistsException;
 import com.santoflores.camarada.exceptions.InvalidCredentialsException;
 import com.santoflores.camarada.exceptions.UserNotFoundException;
 
@@ -32,6 +34,26 @@ public class GlobalExceptionHandler {
                 .body(Map.of(
                     "message", e.getMessage()
                 ));
+    }
+
+    @ExceptionHandler(EmailAlreadyExistsException.class)
+    public ResponseEntity<?> handleInvalidCredentials(
+            EmailAlreadyExistsException e) {
+
+        return ResponseEntity
+                .status(HttpStatus.CONFLICT)
+                .body(Map.of(
+                    "message", e.getMessage()
+                ));
+    }
+
+    @ExceptionHandler(HttpMessageNotReadableException.class)
+    public ResponseEntity<String> handleInvalidJson(
+            HttpMessageNotReadableException ex
+    ) {
+        return ResponseEntity
+            .badRequest()
+            .body("Corpo da requisição inválido");
     }
 
     @ExceptionHandler(Exception.class)
