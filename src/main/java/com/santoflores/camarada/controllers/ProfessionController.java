@@ -19,7 +19,7 @@ import com.santoflores.camarada.services.ProfessionService;
 import lombok.RequiredArgsConstructor;
 
 @RestController
-@RequestMapping("/profession")
+@RequestMapping("/professions")
 @RequiredArgsConstructor
 public class ProfessionController {
 
