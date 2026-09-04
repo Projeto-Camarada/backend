@@ -18,7 +18,7 @@ import lombok.Data;
 @Entity
 @Data
 @Table(name = "provider_service_documents")
-public class ProviderServiceDocument {
+public class ProviderProfessionDocument {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -27,9 +27,9 @@ public class ProviderServiceDocument {
     @ManyToOne
     @JoinColumns({
         @JoinColumn(name = "provider_id", referencedColumnName = "provider_id"),
-        @JoinColumn(name = "service_id", referencedColumnName = "service_id")
+        @JoinColumn(name = "profession_id", referencedColumnName = "profession_id")
     })
-    private ProviderService providerService;
+    private ProviderProfession providerProfession;
 
     private String url;
 

@@ -11,9 +11,9 @@ import lombok.NoArgsConstructor;
 @Embeddable
 @NoArgsConstructor
 @AllArgsConstructor
-public class ProviderServiceId implements Serializable {
+public class ProviderProfessionId implements Serializable {
 
     private Long providerId;
 
-    private Long serviceId;
+    private Long professionId;
 }

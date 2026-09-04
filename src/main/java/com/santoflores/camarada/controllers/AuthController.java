@@ -7,11 +7,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.santoflores.camarada.dtos.auth.AuthResponse;
 import com.santoflores.camarada.dtos.auth.LoginRequest;
-import com.santoflores.camarada.dtos.auth.LoginResponse;
 import com.santoflores.camarada.dtos.auth.RegisterRequest;
-import com.santoflores.camarada.dtos.user.UserResponse;
-import com.santoflores.camarada.mappers.UserMapper;
 import com.santoflores.camarada.services.AuthService;
 
 import jakarta.validation.Valid;
@@ -23,20 +21,19 @@ import lombok.RequiredArgsConstructor;
 public class AuthController {
 
     private final AuthService authService;
-    private final UserMapper userMapper;
 
     @PostMapping("/login")
-    public ResponseEntity<LoginResponse> login(
+    public ResponseEntity<AuthResponse> login(
             @RequestBody @Valid LoginRequest request) {
 
         return ResponseEntity.ok(authService.login(request));
     }
 
     @PostMapping("/register")
-    public ResponseEntity<UserResponse> register(
+    public ResponseEntity<AuthResponse> register(
             @RequestBody @Valid RegisterRequest request) {
 
         return ResponseEntity.status(HttpStatus.CREATED)
-                .body(userMapper.toResponse(authService.register(request)));
+                .body(authService.register(request));
     }
 }

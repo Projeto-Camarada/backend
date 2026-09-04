@@ -43,6 +43,7 @@ public class User implements UserDetails {
     private String password;
     
     @NotNull 
+    @Column(unique = true)
     private String phone;
     
     @Column(name = "photo_url")

@@ -41,8 +41,8 @@ public class Job {
     private Provider provider;
 
     @ManyToOne
-    @JoinColumn(name = "service_id")
-    private Service service;
+    @JoinColumn(name = "profession_id")
+    private Profession profession;
 
     private String title;
 

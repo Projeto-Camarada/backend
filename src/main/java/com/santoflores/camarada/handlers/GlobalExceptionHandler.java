@@ -59,10 +59,13 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(Exception.class)
     public ResponseEntity<?> handleGeneric(Exception ex) {
 
+        // System.out.println(ex.getLocalizedMessage());
+        System.out.println(ex.getMessage());
+
         return ResponseEntity
                 .status(HttpStatus.INTERNAL_SERVER_ERROR)
                 .body(Map.of(
-                        "message", "Ocorreu um erro interno."
+                        "message", "Ocorreu um erro interno." 
                 ));
     }
 

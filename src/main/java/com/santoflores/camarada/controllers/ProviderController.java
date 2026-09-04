@@ -2,6 +2,7 @@ package com.santoflores.camarada.controllers;
 
 import java.util.List;
 
+import org.springframework.security.core.Authentication;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -15,6 +16,7 @@ import com.santoflores.camarada.dtos.provider.ProviderRequest;
 import com.santoflores.camarada.dtos.provider.ProviderResponse;
 import com.santoflores.camarada.mappers.ProviderMapper;
 import com.santoflores.camarada.models.Provider;
+import com.santoflores.camarada.models.User;
 import com.santoflores.camarada.services.ProviderService;
 
 import lombok.RequiredArgsConstructor;
@@ -38,17 +40,22 @@ public class ProviderController {
         return ResponseEntity.ok(providerMapper.toResponse(service.findById(id)));
     }
 
-    @PostMapping("/{userId}")
+    @PostMapping
     public ResponseEntity<ProviderResponse> save(
         @RequestBody ProviderRequest provider,
-        @PathVariable Long userId
+        Authentication authentication
     ){
+
+        User user = (User) authentication.getPrincipal();
+        Long userId = user.getId();
+        
+        Provider providerModel = providerMapper.toModel(provider); 
 
         return ResponseEntity.status(HttpStatus.CREATED)
             .body(
                 providerMapper.toResponse(
                     service.save(
-                        providerMapper.toModel(provider), userId
+                        providerModel, userId, provider.serviceIds()
                     )
                 )
             );

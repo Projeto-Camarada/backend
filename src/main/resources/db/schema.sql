@@ -2,9 +2,9 @@ CREATE TABLE users (
     id BIGINT PRIMARY KEY AUTO_INCREMENT,
 
     name VARCHAR(100) NOT NULL,
-    email VARCHAR(100) UNIQUE NOT NULL,
+    email VARCHAR(100) UNIQUE,
     password VARCHAR(100) NOT NULL,
-    phone VARCHAR(20) NOT NULL /*UNIQUE SE O PROFISSIONAL FIZER OUTRA CONTA COM O MESMO TELEFONE*/,
+    phone VARCHAR(20) NOT NULL UNIQUE/*UNIQUE SE O PROFISSIONAL FIZER OUTRA CONTA COM O MESMO TELEFONE*/,
     photo_url VARCHAR(500),
     
     created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
@@ -29,7 +29,7 @@ CREATE TABLE providers (
 CREATE TABLE professions (
     id BIGINT PRIMARY KEY AUTO_INCREMENT,
     name VARCHAR(100) NOT NULL,
-    active BOOLEAN DEFAULT FALSE
+    active BOOLEAN DEFAULT TRUE
 );
 
 
@@ -39,7 +39,7 @@ CREATE TABLE jobs (
     client_id BIGINT NOT NULL,
     provider_id BIGINT NOT NULL,
 
-    service_id BIGINT NOT NULL,
+    profession_id BIGINT NOT NULL,
 
     title VARCHAR(150),
     description TEXT,
@@ -64,7 +64,7 @@ CREATE TABLE jobs (
 
     FOREIGN KEY (client_id) REFERENCES users(id),
     FOREIGN KEY (provider_id) REFERENCES providers(user_id),
-    FOREIGN KEY (service_id) REFERENCES services(id)
+    FOREIGN KEY (profession_id) REFERENCES professions(id)
 );
 
 CREATE TABLE reviews (
@@ -85,12 +85,6 @@ CREATE TABLE reviews (
     FOREIGN KEY (provider_id) REFERENCES providers(user_id)
 );
 
-CREATE TABLE services (
-    id BIGINT PRIMARY KEY AUTO_INCREMENT,
-    name VARCHAR(100) NOT NULL UNIQUE,
-    description TEXT
-);
-
 CREATE TABLE job_images (
     id BIGINT PRIMARY KEY AUTO_INCREMENT,
 
@@ -101,24 +95,24 @@ CREATE TABLE job_images (
     FOREIGN KEY (job_id) REFERENCES jobs(id)
 );
 
-CREATE TABLE provider_services (
+CREATE TABLE provider_professions (
     provider_id BIGINT NOT NULL,
-    service_id BIGINT NOT NULL,
+    profession_id BIGINT NOT NULL,
 
     description TEXT,
 
 
-    PRIMARY KEY (provider_id, service_id),
+    PRIMARY KEY (provider_id, profession_id),
 
     FOREIGN KEY (provider_id) REFERENCES providers(user_id),
-    FOREIGN KEY (service_id) REFERENCES services(id)
+    FOREIGN KEY (profession_id) REFERENCES professions(id)
 );
 
-CREATE TABLE provider_service_documents (
+CREATE TABLE provider_profession_documents (
     id BIGINT PRIMARY KEY AUTO_INCREMENT,
     
     provider_id BIGINT NOT NULL,
-    service_id BIGINT NOT NULL,
+    profession_id BIGINT NOT NULL,
 
     url VARCHAR(500) NOT NULL,
     description TEXT,
@@ -126,6 +120,47 @@ CREATE TABLE provider_service_documents (
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
 
 
-    FOREIGN KEY (provider_id, service_id) REFERENCES provider_services(provider_id, service_id)
+    FOREIGN KEY (provider_id, profession_id) REFERENCES provider_professions(provider_id, profession_id)
 );
 
+INSERT INTO professions (name, active) VALUES
+    ('Pedreiro', true),
+    ('Pintor', true),
+    ('Eletricista', true),
+    ('Encanador', true),
+    ('Marceneiro', true),
+    ('Serralheiro', true),
+    ('Jardineiro', true),
+    ('Azulejista', true),
+    ('Gesseiro', true),
+    ('Carpinteiro', true),
+    ('Mestre de obras', true),
+    ('Vidraceiro', true),
+    ('Soldador', true),
+    ('Telhadista', true),
+    ('Impermeabilizador', true),
+    ('Instalador de ar-condicionado', true),
+    ('Técnico de informática', true),
+    ('Montador de móveis', true),
+    ('Pedreiro de acabamento', true),
+    ('Paisagista', true),
+    ('Limpeza residencial', true),
+    ('Limpeza comercial', true),
+    ('Diarista', true),
+    ('Fotógrafo', true),
+    ('Cinegrafista', true),
+    ('Designer gráfico', true),
+    ('Desenvolvedor de software', true),
+    ('Técnico de celulares', true),
+    ('Mecânico', true),
+    ('Funileiro', true),
+    ('Eletricista automotivo', true),
+    ('Lavador de veículos', true),
+    ('Manicure', true),
+    ('Cabeleireiro', true),
+    ('Barbeiro', true),
+    ('Costureiro', true),
+    ('Estofador', true),
+    ('Decorador', true),
+    ('Instalador de pisos', true),
+    ('Instalador de portas e janelas', true);

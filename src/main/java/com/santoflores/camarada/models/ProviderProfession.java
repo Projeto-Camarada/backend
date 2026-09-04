@@ -1,6 +1,6 @@
 package com.santoflores.camarada.models;
 
-import com.santoflores.camarada.ids.ProviderServiceId;
+import com.santoflores.camarada.ids.ProviderProfessionId;
 
 import jakarta.persistence.EmbeddedId;
 import jakarta.persistence.Entity;
@@ -18,21 +18,21 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "provider_services")
-public class ProviderService {
+@Table(name = "provider_professions")
+public class ProviderProfession {
 
     @EmbeddedId
-    private ProviderServiceId id;
+    private ProviderProfessionId id;
 
     @MapsId("providerId")
     @ManyToOne
     @JoinColumn(name = "provider_id")
     private Provider provider;
 
-    @MapsId("serviceId")
+    @MapsId("professionId")
     @ManyToOne
-    @JoinColumn(name = "service_id")
-    private Service service;
+    @JoinColumn(name = "profession_id")
+    private Profession profession;
 
     private String description;
 }

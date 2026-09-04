@@ -1,6 +1,6 @@
 package com.santoflores.camarada.dtos.auth;
 
-public record LoginResponse(
+public record AuthResponse(
     String token
 ) {
 }

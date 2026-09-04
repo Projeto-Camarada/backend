@@ -1,6 +1,7 @@
 package com.santoflores.camarada.models;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 import org.hibernate.annotations.CreationTimestamp;
 
