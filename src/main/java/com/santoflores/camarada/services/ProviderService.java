@@ -1,19 +1,14 @@
 package com.santoflores.camarada.services;
 
-import java.time.LocalDateTime;
 import java.util.List;
 
 import org.springframework.stereotype.Service;
 
 import com.santoflores.camarada.enums.Plan;
-import com.santoflores.camarada.ids.ProviderProfessionId;
 import com.santoflores.camarada.models.Provider;
-import com.santoflores.camarada.models.ProviderProfession;
 import com.santoflores.camarada.models.User;
 import com.santoflores.camarada.repositories.ProviderRepository;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Enumerated;
 import lombok.RequiredArgsConstructor;
 
 @Service

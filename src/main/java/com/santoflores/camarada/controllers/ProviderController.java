@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.santoflores.camarada.dtos.provider.ProviderRequest;
 import com.santoflores.camarada.dtos.provider.ProviderResponse;
+import com.santoflores.camarada.dtos.user.UserResponse;
 import com.santoflores.camarada.mappers.ProviderMapper;
 import com.santoflores.camarada.models.Provider;
 import com.santoflores.camarada.models.User;

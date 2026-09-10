@@ -8,7 +8,8 @@ CREATE TABLE users (
     photo_url VARCHAR(500),
     
     created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    update_at TIMESTAMP NOT NULL
+    updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
+        ON UPDATE CURRENT_TIMESTAMP
 );
 
 CREATE TABLE providers (
@@ -28,43 +29,77 @@ CREATE TABLE providers (
 
 CREATE TABLE professions (
     id BIGINT PRIMARY KEY AUTO_INCREMENT,
-    name VARCHAR(100) NOT NULL,
+    name VARCHAR(100) NOT NULL UNIQUE,
     active BOOLEAN DEFAULT TRUE
 );
 
+CREATE TABLE service_requests (
+    id BIGINT PRIMARY KEY AUTO_INCREMENT,
+
+    client_id BIGINT NOT NULL,
+    profession_id BIGINT NOT NULL,
+
+    title VARCHAR(150) NOT NULL,
+    description TEXT,
+
+    estimated_price DECIMAL(10,2),
+    estimated_duration_hours SMALLINT,
+
+    status ENUM(
+        'OPEN',
+        'ASSIGNED',
+        'CANCELLED',
+        'EXPIRED'
+    ) NOT NULL DEFAULT 'OPEN',
+
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+
+    FOREIGN KEY (client_id) REFERENCES users(id),
+    FOREIGN KEY (profession_id) REFERENCES professions(id)
+);
+
+CREATE TABLE service_request_interests (
+    id BIGINT PRIMARY KEY AUTO_INCREMENT,
+
+    request_id BIGINT NOT NULL,
+    provider_id BIGINT NOT NULL,
+
+    status ENUM(
+        'INTERESTED',
+        'REJECTED',
+        'SELECTED',
+        'CANCELLED'
+    ) NOT NULL DEFAULT 'INTERESTED',
+
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+
+    UNIQUE (request_id, provider_id),
+
+    FOREIGN KEY (request_id) REFERENCES service_requests(id),
+    FOREIGN KEY (provider_id) REFERENCES providers(user_id)
+);
 
 CREATE TABLE jobs (
     id BIGINT PRIMARY KEY AUTO_INCREMENT,
 
-    client_id BIGINT NOT NULL,
+    request_id BIGINT NOT NULL,
     provider_id BIGINT NOT NULL,
 
-    profession_id BIGINT NOT NULL,
-
-    title VARCHAR(150),
-    description TEXT,
-
     status ENUM(
-        'REQUESTED',
         'ACCEPTED',
         'IN_PROGRESS',
         'COMPLETED',
         'CANCELLED'
     ) NOT NULL,
 
-    estimated_price DECIMAL(10,2),
     final_price DECIMAL(10,2),
 
-    estimated_duration_hours SMALLINT,
-    actual_duration_hours SMALLINT,
-
-    requested_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    accepted_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     started_at TIMESTAMP NULL,
     completed_at TIMESTAMP NULL,
 
-    FOREIGN KEY (client_id) REFERENCES users(id),
-    FOREIGN KEY (provider_id) REFERENCES providers(user_id),
-    FOREIGN KEY (profession_id) REFERENCES professions(id)
+    FOREIGN KEY (request_id) REFERENCES service_requests(id),
+    FOREIGN KEY (provider_id) REFERENCES providers(user_id)
 );
 
 CREATE TABLE reviews (

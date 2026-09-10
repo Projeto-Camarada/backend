@@ -54,8 +54,8 @@ public class User implements UserDetails {
     private LocalDateTime createdAt;
     
     @UpdateTimestamp
-    @Column(name = "update_at")
-    private LocalDateTime updateAt;
+    @Column(name = "updated_at")
+    private LocalDateTime updatedAt;
     
     @OneToOne(mappedBy = "user")
     private Provider provider;
