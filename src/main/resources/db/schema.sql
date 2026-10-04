@@ -37,7 +37,6 @@ CREATE TABLE service_requests (
     id BIGINT PRIMARY KEY AUTO_INCREMENT,
 
     client_id BIGINT NOT NULL,
-    profession_id BIGINT NOT NULL,
 
     title VARCHAR(150) NOT NULL,
     description TEXT,
@@ -54,8 +53,24 @@ CREATE TABLE service_requests (
 
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
 
-    FOREIGN KEY (client_id) REFERENCES users(id),
-    FOREIGN KEY (profession_id) REFERENCES professions(id)
+    FOREIGN KEY (client_id) REFERENCES users(id)
+);
+
+CREATE TABLE service_request_professions (
+    id BIGINT PRIMARY KEY AUTO_INCREMENT,
+
+    profession_id BIGINT NOT NULL,
+    request_id BIGINT NOT NULL,
+
+     FOREIGN KEY (request_id)
+        REFERENCES service_requests(id)
+        ON DELETE CASCADE,
+
+    FOREIGN KEY (profession_id)
+        REFERENCES professions(id)
+        ON DELETE CASCADE,
+
+    UNIQUE (request_id, profession_id)
 );
 
 CREATE TABLE service_request_interests (
@@ -67,9 +82,7 @@ CREATE TABLE service_request_interests (
     status ENUM(
         'INTERESTED',
         'REJECTED',
-        'SELECTED',
-        'CANCELLED'
-    ) NOT NULL DEFAULT 'INTERESTED',
+    ) NOT NULL,
 
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
 
@@ -199,3 +212,157 @@ INSERT INTO professions (name, active) VALUES
     ('Decorador', true),
     ('Instalador de pisos', true),
     ('Instalador de portas e janelas', true);
+
+    -- ==========================================
+-- CLIENTES DE TESTE
+-- ==========================================
+
+INSERT INTO users (
+    name,
+    email,
+    password,
+    phone,
+    photo_url
+) VALUES
+(
+    'Carlos Oliveira',
+    'carlos.cliente@teste.com',
+    '123456',
+    '11988887777',
+    NULL
+),
+(
+    'Mariana Santos',
+    'mariana.cliente@teste.com',
+    '123456',
+    '11977776666',
+    NULL
+);
+
+
+-- ==========================================
+-- SOLICITAÇÃO DO CARLOS
+-- ==========================================
+
+INSERT INTO service_requests (
+    client_id,
+    title,
+    description,
+    estimated_price,
+    estimated_duration_hours,
+    status
+)
+SELECT
+    id,
+    'Instalação elétrica residencial',
+    'Preciso instalar novas tomadas e revisar a instalação elétrica de dois quartos.',
+    850.00,
+    8,
+    'OPEN'
+FROM users
+WHERE email = 'carlos.cliente@teste.com';
+
+
+-- ==========================================
+-- PROFISSÃO ACEITA PELA SOLICITAÇÃO
+-- Eletricista = ID 3
+-- ==========================================
+
+INSERT INTO service_request_professions (
+    request_id,
+    profession_id
+)
+SELECT
+    sr.id,
+    p.id
+FROM service_requests sr
+JOIN professions p
+    ON p.name = 'Eletricista'
+WHERE sr.title = 'Instalação elétrica residencial'
+  AND sr.client_id = (
+      SELECT id
+      FROM users
+      WHERE email = 'carlos.cliente@teste.com'
+  );
+
+
+-- ==========================================
+-- SOLICITAÇÃO DA MARIANA
+-- ==========================================
+
+INSERT INTO service_requests (
+    client_id,
+    title,
+    description,
+    estimated_price,
+    estimated_duration_hours,
+    status
+)
+SELECT
+    id,
+    'Pintura da sala e dos quartos',
+    'Preciso pintar a sala e dois quartos. As paredes já estão preparadas e preciso apenas da pintura.',
+    1200.00,
+    12,
+    'OPEN'
+FROM users
+WHERE email = 'mariana.cliente@teste.com';
+
+
+-- ==========================================
+-- PROFISSÃO ACEITA PELA SOLICITAÇÃO
+-- Pintor = ID 2
+-- ==========================================
+
+INSERT INTO service_request_professions (
+    request_id,
+    profession_id
+)
+SELECT
+    sr.id,
+    p.id
+FROM service_requests sr
+JOIN professions p
+    ON p.name = 'Pintor'
+WHERE sr.title = 'Pintura da sala e dos quartos'
+  AND sr.client_id = (
+      SELECT id
+      FROM users
+      WHERE email = 'mariana.cliente@teste.com'
+  );
+
+  INSERT INTO service_requests (
+    client_id,
+    title,
+    description,
+    estimated_price,
+    estimated_duration_hours,
+    status
+)
+SELECT
+    id,
+    'Construção de muro no quintal',
+    'Preciso construir um muro de aproximadamente 15 metros no quintal, incluindo levantamento das paredes e acabamento básico.',
+    2500.00,
+    24,
+    'OPEN'
+FROM users
+WHERE email = 'mariana.cliente@teste.com';
+
+
+INSERT INTO service_request_professions (
+    request_id,
+    profession_id
+)
+SELECT
+    sr.id,
+    p.id
+FROM service_requests sr
+JOIN professions p
+    ON p.name = 'Pedreiro'
+WHERE sr.title = 'Construção de muro no quintal'
+  AND sr.client_id = (
+      SELECT id
+      FROM users
+      WHERE email = 'mariana.cliente@teste.com'
+  );
