@@ -102,6 +102,8 @@
 	</dependencies>
 
 	<build>
+		<finalName>camarada</finalName>
+
 		<plugins>
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
