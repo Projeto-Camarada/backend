@@ -1,6 +1,5 @@
 package com.santoflores.camarada.services;
 
-import com.santoflores.camarada.dtos.ServiceRequestInterestsResponseDTO;
 import com.santoflores.camarada.models.ServiceRequestInterests;
 import com.santoflores.camarada.repositories.ServiceRequestInterestsRepository;
 import org.springframework.stereotype.Service;
