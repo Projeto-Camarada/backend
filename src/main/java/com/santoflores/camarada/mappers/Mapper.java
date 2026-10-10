@@ -1,7 +1,7 @@
 package com.santoflores.camarada.mappers;
 
-public interface Mapper<T, P> {
-    T toModel(P dto);
+public interface Mapper<M, Q, S> {
+    M toModel(Q dto);
     
-    P fromModel(T model);
+    S fromModel(M model);
 }

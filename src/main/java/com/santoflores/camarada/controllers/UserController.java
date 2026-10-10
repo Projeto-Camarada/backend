@@ -12,47 +12,49 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.santoflores.camarada.dtos.provider.ProviderResponse;
-import com.santoflores.camarada.dtos.user.UserResponse;
+import com.santoflores.camarada.dtos.user.UserResDto;
 import com.santoflores.camarada.mappers.UserMapper;
 import com.santoflores.camarada.models.User;
 import com.santoflores.camarada.services.UserService;
 
-import lombok.RequiredArgsConstructor;
 
 @RestController
 @RequestMapping("/users")
-@RequiredArgsConstructor
 public class UserController {
 
     private final UserService service;
-    private final UserMapper userMapper;
+    private final UserMapper mapper;
+
+    public UserController(UserService service, UserMapper mapper) {
+        this.service = service;
+        this.mapper = mapper;
+    } 
 
     @GetMapping("/{id}")
-    public ResponseEntity<UserResponse> findById(@PathVariable Long id){
-        return ResponseEntity.ok(userMapper.toResponse(service.findById(id)));
+    public ResponseEntity<UserResDto> findById(@PathVariable Long id){
+        return ResponseEntity.ok(mapper.fromModel(service.findById(id)));
     }
 
     @GetMapping("/me")
-    public ResponseEntity<UserResponse> getMe(Authentication authentication){
+    public ResponseEntity<UserResDto> getMe(Authentication authentication){
         User user = (User) authentication.getPrincipal();
 
-        return ResponseEntity.ok(userMapper.toResponse(service.findById(user.getId())));
+        return ResponseEntity.ok(mapper.fromModel(service.findById(user.getId())));
     }
 
     @GetMapping
-    public ResponseEntity<List<UserResponse>> findAll(){
+    public ResponseEntity<List<UserResDto>> findAll(){
         return ResponseEntity.ok(service.findAll().stream()
-            .map(it -> userMapper.toResponse(it)).toList());
+            .map(it -> mapper.fromModel(it)).toList());
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<UserResponse> update(
+    public ResponseEntity<UserResDto> update(
             @PathVariable Long id,
             @RequestBody User user){
 
         user.setId(id);
-        return ResponseEntity.ok(userMapper.toResponse(service.save(user)));
+        return ResponseEntity.ok(mapper.fromModel(service.save(user)));
     }
 
     @DeleteMapping("/{id}")

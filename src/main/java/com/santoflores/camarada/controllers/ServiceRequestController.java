@@ -1,9 +1,11 @@
 package com.santoflores.camarada.controllers;
 
-import com.santoflores.camarada.dtos.serviceRequest.ServiceRequestDto;
+import com.santoflores.camarada.dtos.serviceRequest.ServiceRequestResDto;
 import com.santoflores.camarada.mappers.ServiceRequestMapper;
+import com.santoflores.camarada.models.User;
 import com.santoflores.camarada.services.ServiceRequestService;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -20,19 +22,16 @@ public class ServiceRequestController {
         this.mapper = mapper;
     }
 
-    @GetMapping
-    public ResponseEntity<List<ServiceRequestDto>> findAll() {
-        return ResponseEntity.ok(
-            service.findAll().stream()
-                .map(it -> mapper.fromModel(it))
-                .toList()
-        );
-    }
+    @GetMapping("/provider/by/profession-and-not-accepted")
+    public ResponseEntity<List<ServiceRequestResDto>> findByProfessionIdAndNotAcceptedByProviderId(Authentication authentication){
 
-    @GetMapping("/profession/{professionId}")
-    public ResponseEntity<List<ServiceRequestDto>> findByProfessionId(@PathVariable Long professionId) {
+        User user = (User) authentication.getPrincipal();
+        Long userId = user.getId();
+      
+
+
         return ResponseEntity.ok(
-            service.findByProfession(professionId).stream()
+            service.findByProfessionIdAndNotAcceptedByProviderId(usreId).stream()
                 .map(it -> mapper.fromModel(it))
                 .toList()
         );

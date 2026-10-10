@@ -11,8 +11,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.santoflores.camarada.dtos.profession.ProfessionRequest;
-import com.santoflores.camarada.dtos.profession.ProfessionResponse;
+import com.santoflores.camarada.dtos.profession.ProfessionReqDto;
+import com.santoflores.camarada.dtos.profession.ProfessionResDto;
 import com.santoflores.camarada.mappers.ProfessionMapper;
 import com.santoflores.camarada.services.ProfessionService;
 
@@ -27,8 +27,8 @@ public class ProfessionController {
     private final ProfessionMapper professionMapper;
 
     @PostMapping
-    public ResponseEntity<ProfessionResponse> create(
-            @RequestBody ProfessionRequest profession){
+    public ResponseEntity<ProfessionResDto> create(
+            @RequestBody ProfessionReqDto profession){
 
         return ResponseEntity.status(HttpStatus.CREATED)
             .body(
@@ -41,13 +41,13 @@ public class ProfessionController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<ProfessionResponse> findById(@PathVariable Long id){
+    public ResponseEntity<ProfessionResDto> findById(@PathVariable Long id){
 
         return ResponseEntity.ok(professionMapper.toResponse(service.findById(id)));
     }
 
     @GetMapping
-    public ResponseEntity<List<ProfessionResponse>> findAll(){
+    public ResponseEntity<List<ProfessionResDto>> findAll(){
         return ResponseEntity.ok(
             service.findAll().stream()
             .map(it -> professionMapper.toResponse(it)).toList());

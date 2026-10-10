@@ -2,15 +2,15 @@ package com.santoflores.camarada.mappers;
 
 import org.springframework.stereotype.Component;
 
-import com.santoflores.camarada.dtos.serviceRequest.ServiceRequestDto;
+import com.santoflores.camarada.dtos.serviceRequest.ServiceRequestReqDto;
+import com.santoflores.camarada.dtos.serviceRequest.ServiceRequestResDto;
 import com.santoflores.camarada.models.ServiceRequest;
 
 @Component 
-public class ServiceRequestMapper implements Mapper<ServiceRequest, ServiceRequestDto> {
+public class ServiceRequestMapper implements Mapper<ServiceRequest, ServiceRequestReqDto, ServiceRequestResDto> {
     @Override
-    public ServiceRequest toModel(ServiceRequestDto dto) {
+    public ServiceRequest toModel(ServiceRequestReqDto dto) {
         return ServiceRequest.builder()
-            .client(dto.client())
             .description(dto.description())
             .estimatedDurationHours(dto.estimatedDurationHours())
             .estimatedPrice(dto.estimatedPrice())
@@ -21,17 +21,17 @@ public class ServiceRequestMapper implements Mapper<ServiceRequest, ServiceReque
 
 
     @Override
-    public ServiceRequestDto fromModel(ServiceRequest model) {
-        return new ServiceRequestDto(
+    public ServiceRequestResDto fromModel(ServiceRequest model) {
+        return new ServiceRequestResDto(
             model.getId(),
-            model.getClient(),
+            null,
             model.getTitle(),
             model.getDescription(),
             model.getEstimatedPrice(),
             model.getEstimatedDurationHours(),
             model.getStatus(),
             model.getCreatedAt(),
-            model.getProfessions()
+            null
         );
     }
 }

@@ -7,7 +7,7 @@ import com.santoflores.camarada.enums.Plan;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
-public record ProviderResponse(
+public record ProviderResDto(
     Long id,
 
     Plan plan,

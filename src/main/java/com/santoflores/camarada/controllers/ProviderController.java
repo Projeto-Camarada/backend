@@ -12,9 +12,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.santoflores.camarada.dtos.provider.ProviderRequest;
-import com.santoflores.camarada.dtos.provider.ProviderResponse;
-import com.santoflores.camarada.dtos.user.UserResponse;
+import com.santoflores.camarada.dtos.provider.ProviderReqDto;
+import com.santoflores.camarada.dtos.provider.ProviderResDto;
+import com.santoflores.camarada.dtos.user.UserResDto;
 import com.santoflores.camarada.mappers.ProviderMapper;
 import com.santoflores.camarada.models.Provider;
 import com.santoflores.camarada.models.User;
@@ -31,19 +31,19 @@ public class ProviderController {
     private final ProviderMapper providerMapper;
 
     @GetMapping
-    public ResponseEntity<List<ProviderResponse>> findAll(){
+    public ResponseEntity<List<ProviderResDto>> findAll(){
         return ResponseEntity.ok(service.findAll().stream()
             .map(it -> providerMapper.toResponse(it)).toList());
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<ProviderResponse> findById(@PathVariable Long id){
+    public ResponseEntity<ProviderResDto> findById(@PathVariable Long id){
         return ResponseEntity.ok(providerMapper.toResponse(service.findById(id)));
     }
 
     @PostMapping
-    public ResponseEntity<ProviderResponse> save(
-        @RequestBody ProviderRequest provider,
+    public ResponseEntity<ProviderResDto> save(
+        @RequestBody ProviderReqDto provider,
         Authentication authentication
     ){
 

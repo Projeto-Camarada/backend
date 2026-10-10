@@ -3,7 +3,7 @@ package com.santoflores.camarada.dtos.user;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
-public record UserResponse(
+public record UserResDto(
     Long id,
 
     String name,

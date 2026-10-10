@@ -2,14 +2,14 @@ package com.santoflores.camarada.mappers;
 
 import org.springframework.stereotype.Component;
 
-import com.santoflores.camarada.dtos.user.UserRequest;
-import com.santoflores.camarada.dtos.user.UserResponse;
+import com.santoflores.camarada.dtos.user.UserReqDto;
+import com.santoflores.camarada.dtos.user.UserResDto;
 import com.santoflores.camarada.models.User;
 
 @Component
-public class UserMapper {
+public class UserMapper implements Mapper<User, UserReqDto, UserResDto> {
     
-    public User toModel(UserRequest request) {
+    public User toModel(UserReqDto request) {
         return User.builder()
             .name(request.name())
             .phone(request.phone())
@@ -18,8 +18,8 @@ public class UserMapper {
             .build();
     }
 
-    public UserResponse toResponse(User user) {
-        return new UserResponse(
+    public UserResDto fromModel(User user) {
+        return new UserResDto(
             user.getId(),
             user.getName(),
             user.getEmail(),

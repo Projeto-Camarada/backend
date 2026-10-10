@@ -1,15 +1,22 @@
 package com.santoflores.camarada.models;
 
 import jakarta.persistence.*;
-import java.math.BigDecimal;
-import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
-@Data
+import java.time.LocalDateTime;
+
+import org.hibernate.annotations.UpdateTimestamp;
+
+@Builder
+@Data 
+@AllArgsConstructor 
+@NoArgsConstructor 
 @Entity
 @Table(name = "service_request_interests")
-public class ServiceRequestInterests {
+public class ServiceInterest {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -30,7 +37,7 @@ public class ServiceRequestInterests {
     @Column(name = "created_at", nullable = false)
     private LocalDateTime createdAt;
 
-    @UpdateTimestamp
+    @UpdateTimestamp 
     private LocalDateTime updatedAt;
 
     public enum Status {

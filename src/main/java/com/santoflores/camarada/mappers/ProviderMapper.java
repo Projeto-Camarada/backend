@@ -2,15 +2,15 @@ package com.santoflores.camarada.mappers;
 
 import org.springframework.stereotype.Component;
 
-import com.santoflores.camarada.dtos.provider.ProviderRequest;
-import com.santoflores.camarada.dtos.provider.ProviderResponse;
+import com.santoflores.camarada.dtos.provider.ProviderReqDto;
+import com.santoflores.camarada.dtos.provider.ProviderResDto;
 import com.santoflores.camarada.models.Provider;
 
 @Component
 public class ProviderMapper {
     
-    public ProviderResponse toResponse(Provider provider) {
-        return new ProviderResponse(
+    public ProviderResDto toResponse(Provider provider) {
+        return new ProviderResDto(
             provider.getUserId(),
             provider.getPlan(),
             provider.getPlanExpiresAt(),
@@ -23,7 +23,7 @@ public class ProviderMapper {
         );
     }
 
-    public Provider toModel(ProviderRequest provider) {
+    public Provider toModel(ProviderReqDto provider) {
         return Provider.builder()
         .bio(provider.bio())
         .cpfCnpj(provider.cpfCnpj())
