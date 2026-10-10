@@ -26,4 +26,6 @@ public class ServiceRequestService {
     public List<ServiceRequest> findByProfessionsIn(List<Long> professionsId) {
         return serviceRequestRepository.findByProfessions_IdIn(professionsId);
     }
+
+    
 }
