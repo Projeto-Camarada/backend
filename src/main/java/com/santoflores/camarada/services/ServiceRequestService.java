@@ -1,22 +1,23 @@
 package com.santoflores.camarada.services;
 
+import com.santoflores.camarada.models.ProviderProfession;
 import com.santoflores.camarada.models.ServiceInterest;
 import com.santoflores.camarada.models.ServiceRequest;
 import com.santoflores.camarada.repositories.ServiceRequestRepository;
+
+import lombok.RequiredArgsConstructor;
+
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
+@RequiredArgsConstructor 
 public class ServiceRequestService {
 
     private final ServiceRequestRepository repository;
     private final ServiceInterestService serviceInterestService;
-
-    public ServiceRequestService(ServiceRequestRepository repository, ServiceInterestService serviceInterestService) {
-        this.repository = repository;
-        this.serviceInterestService = serviceInterestService;
-    }
+    private final ProviderProfessionService providerProfessionService;
 
     public List<ServiceRequest> findAll() {
         return repository.findAll();
@@ -30,13 +31,21 @@ public class ServiceRequestService {
         return repository.findByProfessions_IdIn(professionsId);
     }
 
-    public List<ServiceRequest> findByProfessionIdAndNotAcceptedByProviderId(Long providerId) {
+    public List<ServiceRequest> findAvailableRequest(Long providerId) {
         
-        List<Long> serviceRequests = serviceInterestService.findByProviderId(providerId).stream().map(it -> it.getServiceRequest().getId()).toList();
-        
-        repository.findByProfessions_Id(providerId);
-    
+        List<Long> professionIds = providerProfessionService
+            .findByProvider(providerId)
+                .stream()
+                    .map(it -> it.getProfession().getId())
+                        .toList(); 
 
+        List<ServiceRequest> requests = repository.findByProfessions_IdIn(professionIds); 
+        
+        List<Long> serviceRequests = serviceInterestService.findByProviderId(providerId)
+            .stream().map(it -> it.getServiceRequest().getId()).toList();
+
+
+        return requests.stream().filter(it -> !serviceRequests.contains(it.getId())).toList();
     }
 
     

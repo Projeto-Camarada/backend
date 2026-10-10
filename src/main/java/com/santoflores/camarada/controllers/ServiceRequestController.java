@@ -22,17 +22,15 @@ public class ServiceRequestController {
         this.mapper = mapper;
     }
 
-    @GetMapping("/provider/by/profession-and-not-accepted")
-    public ResponseEntity<List<ServiceRequestResDto>> findByProfessionIdAndNotAcceptedByProviderId(Authentication authentication){
+    @GetMapping("/available")
+    public ResponseEntity<List<ServiceRequestResDto>> findAvailableRequest(Authentication authentication){
 
         User user = (User) authentication.getPrincipal();
         Long userId = user.getId();
       
-
-
         return ResponseEntity.ok(
-            service.findByProfessionIdAndNotAcceptedByProviderId(usreId).stream()
-                .map(it -> mapper.fromModel(it))
+            service.findAvailableRequest(userId).stream()
+                .map(mapper::fromModel)
                 .toList()
         );
     }
