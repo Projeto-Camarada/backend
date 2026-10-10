@@ -1,10 +1,8 @@
 package com.santoflores.camarada.services;
 
-import com.santoflores.camarada.dtos.ServiceRequestResponseDTO;
 import com.santoflores.camarada.models.ServiceRequest;
 import com.santoflores.camarada.repositories.ServiceRequestRepository;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -17,14 +15,15 @@ public class ServiceRequestService {
         this.serviceRequestRepository = serviceRequestRepository;
     }
 
-    @Transactional(readOnly = true)
-    public List<ServiceRequestResponseDTO> findAll() {
+    public List<ServiceRequest> findAll() {
+        return serviceRequestRepository.findAll();
+    }
+    
+    public List<ServiceRequest> findByProfession(Long professionId) {
+        return serviceRequestRepository.findByProfessions_Id(professionId);
+    }
 
-        List<ServiceRequest> requests =
-                serviceRequestRepository.findAll();
-
-        return requests.stream()
-                .map(ServiceRequestResponseDTO::fromEntity)
-                .toList();
+    public List<ServiceRequest> findByProfessionsIn(List<Long> professionsId) {
+        return serviceRequestRepository.findByProfessions_IdIn(professionsId);
     }
 }

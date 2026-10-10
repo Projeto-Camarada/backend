@@ -10,8 +10,8 @@ import com.santoflores.camarada.security.TokenService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import com.santoflores.camarada.dtos.auth.LoginRequest;
 import com.santoflores.camarada.dtos.auth.AuthResponse;
+import com.santoflores.camarada.dtos.auth.LoginRequest;
 import com.santoflores.camarada.dtos.auth.RegisterRequest;
 import com.santoflores.camarada.exceptions.EmailAlreadyExistsException;
 import com.santoflores.camarada.exceptions.InvalidCredentialsException;

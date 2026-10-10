@@ -1,12 +1,18 @@
 package com.santoflores.camarada.models;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.NoArgsConstructor;
+
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
 
 @Entity
+@Builder 
+@NoArgsConstructor 
+@AllArgsConstructor 
 @Table(name = "service_requests")
 public class ServiceRequest {
 
@@ -43,7 +49,7 @@ public class ServiceRequest {
         joinColumns = @JoinColumn(name = "request_id"),
         inverseJoinColumns = @JoinColumn(name = "profession_id")
     )
-    private List<Profession> professions = new ArrayList<>();
+    private List<Profession> professions;
 
     public enum Status {
         OPEN,
