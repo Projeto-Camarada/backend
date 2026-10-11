@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 import com.santoflores.camarada.exceptions.DuplicatePhoneException;
 import com.santoflores.camarada.exceptions.EmailAlreadyExistsException;
 import com.santoflores.camarada.exceptions.InvalidCredentialsException;
+import com.santoflores.camarada.exceptions.ProviderNotFoundException;
 import com.santoflores.camarada.exceptions.UserAlreadyExistsException;
 import com.santoflores.camarada.exceptions.UserNotFoundException;
 
@@ -18,31 +19,13 @@ import com.santoflores.camarada.exceptions.UserNotFoundException;
 public class GlobalExceptionHandler {
     
     @ExceptionHandler(UserNotFoundException.class)
-    public ResponseEntity<GlobalExceptionResDto> handleUserNotFound(
-    UserNotFoundException ex) {
-        return ResponseEntity
-            .status(404)
-            .body(new GlobalExceptionResDto(ex.getMessage()));
+    public ResponseEntity<GlobalExceptionResDto> handleUserNotFound(UserNotFoundException e) {
+        return ResponseEntity.status(404).body(new GlobalExceptionResDto(e.getMessage()));
     }
 
     @ExceptionHandler(InvalidCredentialsException.class)
-    public ResponseEntity<GlobalExceptionResDto> handleInvalidCredentials(
-            InvalidCredentialsException e) {
-
-        return ResponseEntity
-                .status(HttpStatus.UNAUTHORIZED)
-                .body(new GlobalExceptionResDto(e.getMessage(), "INVALID_CREDENTIALS"));
-    }
-
-    @ExceptionHandler(EmailAlreadyExistsException.class)
-    public ResponseEntity<?> handleInvalidCredentials(
-            EmailAlreadyExistsException e) {
-
-        return ResponseEntity
-                .status(HttpStatus.CONFLICT)
-                .body(Map.of(
-                    "message", e.getMessage()
-                ));
+    public ResponseEntity<GlobalExceptionResDto> handleInvalidCredentials(InvalidCredentialsException e) {
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(new GlobalExceptionResDto(e.getMessage(), "INVALID_CREDENTIALS"));
     }
 
     @ExceptionHandler(UserAlreadyExistsException.class)
@@ -51,23 +34,16 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(HttpMessageNotReadableException.class)
-    public ResponseEntity<String> handleInvalidJson(
-            HttpMessageNotReadableException ex
-    ) {
-        return ResponseEntity
-            .badRequest()
-            .body("Corpo da requisição inválido");
+    public ResponseEntity<String> handleInvalidJson(HttpMessageNotReadableException e) {
+        return ResponseEntity.badRequest().body("Corpo da requisição inválido");
     }
 
+    @ExceptionHandler(ProviderNotFoundException.class)
+    public ResponseEntity<GlobalExceptionResDto> handlerProviderNotFound(ProviderNotFoundException e) {
+        return ResponseEntity.status(404).body(new GlobalExceptionResDto(e.getMessage()));
+    } 
 
-    @ExceptionHandler(DuplicatePhoneException.class)
-    public ResponseEntity<Map<String, String>> handleDuplicatePhone(
-            DuplicatePhoneException ex
-    ) {
-        return ResponseEntity
-            .status(409)
-            .body(Map.of("message", ex.getMessage()));
-    }
+
 
     @ExceptionHandler(Exception.class)
     public ResponseEntity<?> handleGeneric(Exception ex) {

@@ -2,7 +2,7 @@ package com.santoflores.camarada.exceptions;
 
 public class ProviderNotFoundException extends RuntimeException {
     public ProviderNotFoundException() {
-        super("Usuário não encontrado");
+        super("Profissional não encontrado");
     }
 
     public ProviderNotFoundException(String message) {
