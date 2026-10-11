@@ -10,6 +10,8 @@ import com.santoflores.camarada.security.TokenService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import com.santoflores.camarada.dtos.auth.AuthResetPasswordReqDto;
+import com.santoflores.camarada.dtos.auth.AuthResetPasswordResDto;
 import com.santoflores.camarada.dtos.auth.AuthResponse;
 import com.santoflores.camarada.dtos.auth.ForgotPasswordVerifyReqDto;
 import com.santoflores.camarada.dtos.auth.LoginReqDto;
@@ -130,5 +132,14 @@ public class AuthService {
             .orElseThrow(InvalidCredentialsException::new);
     }
 
-    
+    public AuthResetPasswordResDto resetPassword(AuthResetPasswordReqDto dto) {
+
+        Provider providerFoundByDocument = providerService.findByCpfCnpj(dto.cpfCnpj());
+        
+        User user = userRepository.findByIdAndEmailIgnoreCaseOrPhone(
+            providerFoundByDocument.getUserId(), dto.identifier(), dto.identifier())
+                .orElseThrow(InvalidCredentialsException::new);
+
+        return new AuthResetPasswordResDto(user.getPhone());
+    }
 }

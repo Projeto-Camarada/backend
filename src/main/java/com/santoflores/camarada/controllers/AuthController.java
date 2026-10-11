@@ -7,10 +7,13 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.santoflores.camarada.dtos.auth.AuthResetPasswordReqDto;
+import com.santoflores.camarada.dtos.auth.AuthResetPasswordResDto;
 import com.santoflores.camarada.dtos.auth.AuthResponse;
 import com.santoflores.camarada.dtos.auth.ForgotPasswordVerifyReqDto;
 import com.santoflores.camarada.dtos.auth.LoginReqDto;
 import com.santoflores.camarada.dtos.auth.RegisterRequest;
+import com.santoflores.camarada.dtos.user.UserResetPasswordResDto;
 import com.santoflores.camarada.services.AuthService;
 
 import jakarta.validation.Valid;
@@ -45,6 +48,11 @@ public class AuthController {
         authService.verifyDocuments(requestDto);            
         
         return ResponseEntity.status(204).build();
+    }
+
+    @PostMapping("/reset-password")
+    public ResponseEntity<AuthResetPasswordResDto> resetPassword(@RequestBody @Valid AuthResetPasswordReqDto request) {
+        return ResponseEntity.status(200).body(authService.resetPassword(request));
     }
 
 }
