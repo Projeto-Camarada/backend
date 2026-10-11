@@ -11,6 +11,7 @@ public class CamaradaApplication {
 	public static void main(String[] args) {
 	
 		Dotenv.configure()
+			.ignoreIfMissing()
 			.systemProperties()
 			.load();
 		SpringApplication.run(CamaradaApplication.class, args);
