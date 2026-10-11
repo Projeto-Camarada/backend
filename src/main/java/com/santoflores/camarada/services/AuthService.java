@@ -11,11 +11,15 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.santoflores.camarada.dtos.auth.AuthResponse;
+import com.santoflores.camarada.dtos.auth.ForgotPasswordVerifyReqDto;
 import com.santoflores.camarada.dtos.auth.LoginRequest;
 import com.santoflores.camarada.dtos.auth.RegisterRequest;
+import com.santoflores.camarada.exceptions.DuplicatePhoneException;
 import com.santoflores.camarada.exceptions.EmailAlreadyExistsException;
 import com.santoflores.camarada.exceptions.InvalidCredentialsException;
+import com.santoflores.camarada.exceptions.UserNotFoundException;
 import com.santoflores.camarada.mappers.AuthMapper;
+import com.santoflores.camarada.models.Provider;
 import com.santoflores.camarada.models.User;
 import com.santoflores.camarada.repositories.UserRepository;
 
@@ -25,6 +29,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class AuthService {
 
+    private final ProviderService providerService;
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
     private final TokenService tokenService;
@@ -104,8 +109,13 @@ public class AuthService {
             return new AuthResponse(token);
 
         } catch (DataIntegrityViolationException e) {
-            //POR ENQUANTO DEIXAR ASSIM
-            throw new InvalidCredentialsException("Dados inválidos.");
+            String message = e.getMessage().toLowerCase();
+
+            if (message.contains("duplicate") && message.contains("users.phone")) {
+                throw new DuplicatePhoneException("Usuário já cadastrado");
+            }
+
+            throw new InvalidCredentialsException();
 
         } catch (Exception e) {
             System.out.println(e.getClass().getName());
@@ -113,4 +123,14 @@ public class AuthService {
         }
 
     }
+
+    public void verifyDocuments(ForgotPasswordVerifyReqDto dto) {
+    
+        Provider providerFoundByDocument = providerService.findByCpfCnpj(dto.cpfCnpj());
+        
+        userRepository.findByIdAndPhone(providerFoundByDocument.getUserId(), dto.phone())
+            .orElseThrow(InvalidCredentialsException::new);
+    }
+
+    
 }

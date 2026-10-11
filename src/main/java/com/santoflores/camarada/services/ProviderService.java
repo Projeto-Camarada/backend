@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.stereotype.Service;
 
 import com.santoflores.camarada.enums.Plan;
+import com.santoflores.camarada.exceptions.ProviderNotFoundException;
 import com.santoflores.camarada.models.Provider;
 import com.santoflores.camarada.models.User;
 import com.santoflores.camarada.repositories.ProviderRepository;
@@ -45,6 +46,11 @@ public class ProviderService {
     public Provider findById(Long id){
         return repository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Prestador não encontrado."));
+    }
+
+    public Provider findByCpfCnpj(String cpfCnpj) {
+        return repository.findByCpfCnpj(cpfCnpj)
+            .orElseThrow(() -> new ProviderNotFoundException());
     }
 
     public List<Provider> findAll(){

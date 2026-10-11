@@ -87,6 +87,9 @@ CREATE TABLE service_request_interests (
     ) NOT NULL,
 
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
+        ON UPDATE CURRENT_TIMESTAMP,
+
 
     UNIQUE (request_id, provider_id),
 

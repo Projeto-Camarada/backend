@@ -7,15 +7,20 @@ import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.santoflores.camarada.dtos.user.UserResDto;
+import com.santoflores.camarada.dtos.user.UserResetPasswordReqDto;
+import com.santoflores.camarada.dtos.user.UserResetPasswordResDto;
 import com.santoflores.camarada.mappers.UserMapper;
 import com.santoflores.camarada.models.User;
 import com.santoflores.camarada.services.UserService;
+
+import jakarta.validation.Valid;
 
 
 @RestController
@@ -55,6 +60,22 @@ public class UserController {
 
         user.setId(id);
         return ResponseEntity.ok(mapper.fromModel(service.save(user)));
+    }
+
+
+    @PutMapping("/{id}/password")
+    public ResponseEntity<UserResetPasswordResDto> resetPassword(
+            @PathVariable Long id,
+            @RequestBody @Valid UserResetPasswordReqDto dto) {
+
+        User user = service.resetPassword(
+            User.builder()
+                .id(id)
+                .password(dto.newPassword())
+                .build()
+        );
+
+        return ResponseEntity.status(200).body(new UserResetPasswordResDto().fromModel(user));
     }
 
     @DeleteMapping("/{id}")

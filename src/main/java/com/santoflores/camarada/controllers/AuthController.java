@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.santoflores.camarada.dtos.auth.AuthResponse;
+import com.santoflores.camarada.dtos.auth.ForgotPasswordVerifyReqDto;
 import com.santoflores.camarada.dtos.auth.LoginRequest;
 import com.santoflores.camarada.dtos.auth.RegisterRequest;
 import com.santoflores.camarada.services.AuthService;
@@ -36,4 +37,14 @@ public class AuthController {
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(authService.register(request));
     }
+
+    @PostMapping("/forgot-password/provider/verify")
+    public ResponseEntity<Void> verifyDocuments(
+            @RequestBody @Valid ForgotPasswordVerifyReqDto requestDto) {
+
+        authService.verifyDocuments(requestDto);            
+        
+        return ResponseEntity.status(204).build();
+    }
+
 }

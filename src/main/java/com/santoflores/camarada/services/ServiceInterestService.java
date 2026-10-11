@@ -17,11 +17,11 @@ public class ServiceInterestService {
     }
 
     public List<ServiceInterest> findByRequestId(Long requestId) {
-        return repository.findByRequest_Id(requestId);
+        return repository.findByServiceRequest_Id(requestId);
     }
 
     public List<ServiceInterest> findByProviderId(Long providerId) {
-        return repository.findByProvider_Id(providerId);
+        return repository.findByProvider_UserId(providerId);
     }
 
     public ServiceInterest create(ServiceInterest interest) {

@@ -8,6 +8,7 @@ import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
+import com.santoflores.camarada.exceptions.DuplicatePhoneException;
 import com.santoflores.camarada.exceptions.EmailAlreadyExistsException;
 import com.santoflores.camarada.exceptions.InvalidCredentialsException;
 import com.santoflores.camarada.exceptions.UserNotFoundException;
@@ -32,6 +33,7 @@ public class GlobalExceptionHandler {
         return ResponseEntity
                 .status(HttpStatus.UNAUTHORIZED)
                 .body(Map.of(
+                    "code", "INVALID_CREDENTIALS",
                     "message", e.getMessage()
                 ));
     }
@@ -54,6 +56,16 @@ public class GlobalExceptionHandler {
         return ResponseEntity
             .badRequest()
             .body("Corpo da requisição inválido");
+    }
+
+
+    @ExceptionHandler(DuplicatePhoneException.class)
+    public ResponseEntity<Map<String, String>> handleDuplicatePhone(
+            DuplicatePhoneException ex
+    ) {
+        return ResponseEntity
+            .status(409)
+            .body(Map.of("message", ex.getMessage()));
     }
 
     @ExceptionHandler(Exception.class)
