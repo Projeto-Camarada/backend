@@ -11,31 +11,27 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 import com.santoflores.camarada.exceptions.DuplicatePhoneException;
 import com.santoflores.camarada.exceptions.EmailAlreadyExistsException;
 import com.santoflores.camarada.exceptions.InvalidCredentialsException;
+import com.santoflores.camarada.exceptions.UserAlreadyExistsException;
 import com.santoflores.camarada.exceptions.UserNotFoundException;
 
 @RestControllerAdvice
 public class GlobalExceptionHandler {
     
     @ExceptionHandler(UserNotFoundException.class)
-    public ResponseEntity<?> handleUserNotFound(
+    public ResponseEntity<GlobalExceptionResDto> handleUserNotFound(
     UserNotFoundException ex) {
         return ResponseEntity
             .status(404)
-            .body(Map.of(
-                "message", ex.getMessage()
-            ));
+            .body(new GlobalExceptionResDto(ex.getMessage()));
     }
 
     @ExceptionHandler(InvalidCredentialsException.class)
-    public ResponseEntity<?> handleInvalidCredentials(
+    public ResponseEntity<GlobalExceptionResDto> handleInvalidCredentials(
             InvalidCredentialsException e) {
 
         return ResponseEntity
                 .status(HttpStatus.UNAUTHORIZED)
-                .body(Map.of(
-                    "code", "INVALID_CREDENTIALS",
-                    "message", e.getMessage()
-                ));
+                .body(new GlobalExceptionResDto(e.getMessage(), "INVALID_CREDENTIALS"));
     }
 
     @ExceptionHandler(EmailAlreadyExistsException.class)
@@ -47,6 +43,11 @@ public class GlobalExceptionHandler {
                 .body(Map.of(
                     "message", e.getMessage()
                 ));
+    }
+
+    @ExceptionHandler(UserAlreadyExistsException.class)
+    public ResponseEntity<GlobalExceptionResDto> handlerUserAlreadyExists(UserAlreadyExistsException e) {
+        return ResponseEntity.status(409).body(new GlobalExceptionResDto(e.getMessage()));
     }
 
     @ExceptionHandler(HttpMessageNotReadableException.class)
@@ -79,6 +80,15 @@ public class GlobalExceptionHandler {
                 .body(Map.of(
                         "message", "Ocorreu um erro interno." 
                 ));
+    }
+
+    public record GlobalExceptionResDto(
+        String message,
+        String code
+    ) {
+        public GlobalExceptionResDto(String message) {
+            this(message, null);
+        }
     }
 
 }

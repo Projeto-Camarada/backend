@@ -75,7 +75,7 @@ public class UserController {
                 .build()
         );
 
-        return ResponseEntity.status(200).body(new UserResetPasswordResDto().fromModel(user));
+        return ResponseEntity.status(200).body(new UserResetPasswordResDto(user.getPhone()));
     }
 
     @DeleteMapping("/{id}")

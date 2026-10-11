@@ -23,10 +23,10 @@ public class UserService implements UserDetailsService{
     private final PasswordEncoder passwordEncoder;
 
     @Override
-    public UserDetails loadUserByUsername(String phone) throws UsernameNotFoundException {
+    public UserDetails loadUserByUsername(String identifier) throws UsernameNotFoundException {
 
         try {
-            User user = repository.findByPhone(phone).orElseThrow(() ->
+            User user = repository.findByEmailIgnoreCaseOrPhone(identifier, identifier).orElseThrow(() ->
                 new UsernameNotFoundException("Usuário não encontrado.")
             );
 

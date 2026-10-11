@@ -12,11 +12,12 @@ import org.springframework.stereotype.Service;
 
 import com.santoflores.camarada.dtos.auth.AuthResponse;
 import com.santoflores.camarada.dtos.auth.ForgotPasswordVerifyReqDto;
-import com.santoflores.camarada.dtos.auth.LoginRequest;
+import com.santoflores.camarada.dtos.auth.LoginReqDto;
 import com.santoflores.camarada.dtos.auth.RegisterRequest;
 import com.santoflores.camarada.exceptions.DuplicatePhoneException;
 import com.santoflores.camarada.exceptions.EmailAlreadyExistsException;
 import com.santoflores.camarada.exceptions.InvalidCredentialsException;
+import com.santoflores.camarada.exceptions.UserAlreadyExistsException;
 import com.santoflores.camarada.exceptions.UserNotFoundException;
 import com.santoflores.camarada.mappers.AuthMapper;
 import com.santoflores.camarada.models.Provider;
@@ -37,10 +38,10 @@ public class AuthService {
     private final AuthMapper authMapper;
 
 
-    public AuthResponse login(LoginRequest request) {
+    public AuthResponse login(LoginReqDto request) {
 
         UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(
-            request.phone(), 
+            request.identifier(), 
             request.password()
         );
 
@@ -82,8 +83,8 @@ public class AuthService {
     }
 
     public AuthResponse register(RegisterRequest request) {
-        if (userRepository.existsByEmail(request.phone())) {
-            throw new RuntimeException("Telefone já cadastrado.");
+        if (userRepository.existsByPhone(request.phone())) {
+            throw new UserAlreadyExistsException();
         }
 
         String email = request.email();
@@ -92,14 +93,15 @@ public class AuthService {
             email = email.trim().toLowerCase();
 
             if (userRepository.existsByEmail(email)) {
-                throw new EmailAlreadyExistsException("E-mail já cadastrado");
+                throw new UserAlreadyExistsException();
             }
         } else {
             email = null;
         }
 
-        User user = authMapper.toModel(request, passwordEncoder);
+        User user = authMapper.toModel(request);
         user.setEmail(email);
+        user.setPassword(passwordEncoder.encode(request.password()));
         
         try {
             user = userRepository.save(user);
@@ -109,12 +111,8 @@ public class AuthService {
             return new AuthResponse(token);
 
         } catch (DataIntegrityViolationException e) {
-            String message = e.getMessage().toLowerCase();
-
-            if (message.contains("duplicate") && message.contains("users.phone")) {
-                throw new DuplicatePhoneException("Usuário já cadastrado");
-            }
-
+            System.out.println(e.getMessage().toLowerCase());
+            
             throw new InvalidCredentialsException();
 
         } catch (Exception e) {

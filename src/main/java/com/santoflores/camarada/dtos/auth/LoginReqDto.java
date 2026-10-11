@@ -3,9 +3,9 @@ package com.santoflores.camarada.dtos.auth;
 import jakarta.validation.constraints.NotBlank;
 import lombok.Data;
 
-public record LoginRequest(
+public record LoginReqDto(
     @NotBlank
-    String phone,
+    String identifier,
 
     @NotBlank
     String password
